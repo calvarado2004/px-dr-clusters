@@ -1,0 +1,34 @@
+# SOURCE: https://install.portworx.com/?operator=true&mc=false&kbver=1.21.2&k=etcd%3Ahttp%3A%2F%2F192.168.73.10%3A2379%2Cetcd%3Ahttp%3A%2F%2F192.168.73.11%3A2379%2Cetcd%3Ahttp%3A%2F%2F192.168.73.12%3A2379&f=true&j=auto&m=eth1&d=eth1&c=px-cluster-13d26097-79f5-42b1-b2e8-0b4555302dd8&stork=true&mon=true&st=k8s&promop=true
+kind: StorageCluster
+apiVersion: core.libopenstorage.org/v1
+metadata:
+  name: px-cluster-13d26097-79f5-42b1-b2e8-0b4555302dd8
+  namespace: kube-system
+  annotations:
+    portworx.io/install-source: "https://install.portworx.com/?operator=true&mc=false&kbver=1.21.2&k=etcd%3Ahttp%3A%2F%2F192.168.73.10%3A2379%2Cetcd%3Ahttp%3A%2F%2F192.168.73.11%3A2379%2Cetcd%3Ahttp%3A%2F%2F192.168.73.12%3A2379&f=true&j=auto&m=eth1&d=eth1&c=px-cluster-13d26097-79f5-42b1-b2e8-0b4555302dd8&stork=true&mon=true&st=k8s&promop=true"
+spec:
+  image: portworx/oci-monitor:2.7.2.1
+  imagePullPolicy: Always
+  kvdb:
+    endpoints:
+    - etcd:http://192.168.73.10:2379
+    - etcd:http://192.168.73.11:2379
+    - etcd:http://192.168.73.12:2379
+  storage:
+    useAllWithPartitions: true
+    forceUseDisks: true
+    journalDevice: auto
+  network:
+    dataInterface: eth1
+    mgmtInterface: eth1
+  secretsProvider: k8s
+  stork:
+    enabled: true
+    args:
+      webhook-controller: "false"
+  autopilot:
+    enabled: true
+  monitoring:
+    prometheus:
+      enabled: true
+      exportMetrics: true

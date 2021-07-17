@@ -1,0 +1,37 @@
+# number of worker nodes
+NUM_WORKERS = 3
+
+ENV["VAGRANT_EXPERIMENTAL"] = "disks"
+
+WORKER_IP_BASE = "192.168.73.1" # 200, 201, ...
+TOKEN = "yi6muo.4ytkfl3l6vl8zfpk"
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "centos/8"
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+
+  config.vm.disk :disk, size: "35GB", primary: true
+  
+
+  (0..NUM_WORKERS-1).each do |i|
+    config.vm.define "etcd#{i}" do |etcd|
+
+      etcd.vm.provider "virtualbox" do |v|
+        v.memory = 2048
+        v.cpus = 2
+        v.name = "etcd#{i}.example.com"
+        v.check_guest_additions = false
+        v.gui = false
+        v.customize ["modifyvm", :id, "--audio", "none"]
+      end
+
+      etcd.vm.hostname = "etcd#{i}.example.com"
+
+      etcd.vm.network "private_network", ip: "#{WORKER_IP_BASE}" + i.to_s.rjust(1, '0')
+
+
+    end
+  end
+
+end
