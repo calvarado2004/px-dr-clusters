@@ -65,7 +65,7 @@ Vagrant.configure("2") do |config|
       workerdr.vm.provider "virtualbox" do |vb|
         vb.gui = false
         vb.name = "worker-dr#{i}.drsite.com"
-        vb.memory = "3072"
+        vb.memory = "8192"
         vb.cpus = 2
         vb.check_guest_additions = false
         vb.customize ["modifyvm", :id, "--audio", "none"]

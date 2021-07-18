@@ -1,0 +1,1 @@
+{"disk":[{"uuid":"6750e37a-6172-4a7d-a0c1-464fb159a644","name":"vagrant_primary","controller":"IDE","port":"0","device":"0"},{"uuid":"db61f244-9ff4-4137-8225-b48e2c7e54bd","name":"witness-disk0","controller":"IDE","port":"0","device":"1"}],"floppy":[],"dvd":[]}

@@ -1,0 +1,33 @@
+# number of worker nodes
+
+ENV["VAGRANT_EXPERIMENTAL"] = "disks"
+
+WITNESS_IP = "192.168.73.70"
+TOKEN = "yi6muo.4ytkfl3l6vl8zfpk"
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "centos/8"
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.vm.disk :disk, size: "20GB", primary: true
+
+  config.vm.provision "shell", path: "common.sh"
+
+  config.vm.provision "shell", path: "witness.sh"
+
+  config.vm.define "witness" do |witness|
+    witness.vm.provider "virtualbox" do |v|
+      v.memory = 2048
+      v.cpus = 2
+      v.name = "witness.thirdsite.com"
+      v.check_guest_additions = false
+      v.gui = false
+      v.customize ["modifyvm", :id, "--audio", "none"]
+    end
+    witness.vm.hostname = "witness.thirdsite.com"
+    witness.vm.network "private_network", ip: "#{WITNESS_IP}"
+    witness.vm.disk :disk, size: "30GB", name: "witness-disk0"
+  end
+
+
+
+end
